@@ -25,7 +25,7 @@ namespace Smallpox
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     [MetaData("com.google.android.gms.vision.DEPENDENCIES", Value = "ocr")]
-    public class MainActivity : AppCompatActivity, ISurfaceHolderCallback, IProcessor
+    public class MainActivity : AppCompatActivity, ISurfaceHolderCallback, IProcessor, CameraSource.IShutterCallback, CameraSource.IPictureCallback
     {
         private TextView textView;
         private SurfaceView cameraView;
@@ -47,9 +47,10 @@ namespace Smallpox
             textView = FindViewById<TextView>(Resource.Id.txtAux);
             cameraView = FindViewById<SurfaceView>(Resource.Id.surfaceView1);
 
-            TextRecognizer textRecognizer = new TextRecognizer.Builder(ApplicationContext).Build();
-
-            cameraSource = new CameraSource.Builder(ApplicationContext, textRecognizer)
+            //TextRecognizer textRecognizer = new TextRecognizer.Builder(ApplicationContext).Build();
+            MRZDetector mrzDetector = new MRZDetector();
+            
+            cameraSource = new CameraSource.Builder(ApplicationContext, mrzDetector)
                     .SetFacing(CameraFacing.Front)
                     .SetRequestedPreviewSize(1280, 1024)
                     .SetRequestedFps(2.0f)
@@ -57,7 +58,7 @@ namespace Smallpox
                     .Build();
 
             cameraView.Holder.AddCallback(this);
-            textRecognizer.SetProcessor(this);
+            //textRecognizer.SetProcessor(this);
 
         }
 
@@ -125,14 +126,15 @@ namespace Smallpox
             SparseArray items = detections.DetectedItems;
             if (items.Size() != 0)
             {
-                for (int i = 0; i < items.Size(); i++)
-                {
+                    for (int i = 0; i < items.Size(); i++)
+                    {
                     var line = ((TextBlock)items.ValueAt(i)).Value;
                     if (string.IsNullOrEmpty(line)) continue;
                     if (line.Contains("<<<"))
                     {
                         textView.Text = line;
                         //cameraSource.TakePicture()
+                cameraSource.TakePicture(this, this);
                     }
                     if (line.Contains(">>>"))
                     {
@@ -155,6 +157,19 @@ namespace Smallpox
         public void Release()
         {
 
+        }
+
+        public void OnPictureTaken(byte[] data)
+        {
+            // En data esta la imagen
+            // Enviar al API para analizar
+            Console.WriteLine();
+        }
+
+        public void OnShutter()
+        {
+            // Antes de tomar la foto
+            Console.WriteLine();
         }
     }
 }
