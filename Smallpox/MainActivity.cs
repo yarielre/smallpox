@@ -2,6 +2,7 @@
 using System.Text;
 using Android;
 using Android.App;
+using Android.Content;
 using Android.Gms.Vision;
 using Android.Gms.Vision.Texts;
 using Android.Graphics;
@@ -13,7 +14,10 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.Core.App;
+using Android.Provider;
 using static Android.Gms.Vision.Detector;
+
+
 
 namespace Smallpox
 {
@@ -66,6 +70,8 @@ namespace Smallpox
             int id = item.ItemId;
             if (id == Resource.Id.action_settings)
             {
+                var intent = new Intent(this, typeof(EnterpriseData));
+                StartActivity(intent);
                 return true;
             }
 
@@ -74,6 +80,8 @@ namespace Smallpox
 
         private void FabOnClick(object sender, EventArgs eventArgs)
         {
+            //Intent intent = new Intent(MediaStore.ActionImageCapture);
+            //StartActivityForResult(intent, 0);
             View view = (View)sender;
             Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
                 .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
