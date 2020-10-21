@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Runtime.Remoting;
 using System.Text;
 using Android;
 using Android.App;
@@ -18,7 +20,7 @@ using static Android.Gms.Vision.Detector;
 namespace Smallpox
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
-    [MetaData("com.google.android.gms.vision.DEPENDENCIES", Value ="ocr")]
+    [MetaData("com.google.android.gms.vision.DEPENDENCIES", Value = "ocr")]
     public class MainActivity : AppCompatActivity, ISurfaceHolderCallback, IProcessor
     {
         private TextView textView;
@@ -44,7 +46,7 @@ namespace Smallpox
             TextRecognizer textRecognizer = new TextRecognizer.Builder(ApplicationContext).Build();
 
             cameraSource = new CameraSource.Builder(ApplicationContext, textRecognizer)
-                    .SetFacing(CameraFacing.Back)
+                    .SetFacing(CameraFacing.Front)
                     .SetRequestedPreviewSize(1280, 1024)
                     .SetRequestedFps(2.0f)
                     .SetAutoFocusEnabled(true)
@@ -115,16 +117,30 @@ namespace Smallpox
             SparseArray items = detections.DetectedItems;
             if (items.Size() != 0)
             {
-                textView.Post(() =>
+                for (int i = 0; i < items.Size(); i++)
                 {
-                    StringBuilder strBuilder = new StringBuilder();
-                    for (int i = 0; i < items.Size(); i++)
+                    var line = ((TextBlock)items.ValueAt(i)).Value;
+                    if (string.IsNullOrEmpty(line)) continue;
+                    if (line.Contains("<<<"))
                     {
-                        strBuilder.Append(((TextBlock)items.ValueAt(i)).Value);
-                        strBuilder.Append("\n");
+                        textView.Text = line;
+                        //cameraSource.TakePicture()
                     }
-                    textView.Text = strBuilder.ToString();
-                });
+                    if (line.Contains(">>>"))
+                    {
+                        textView.Text = line;
+                    }
+                }
+                //textView.Post(() =>
+                //{
+                //    StringBuilder strBuilder = new StringBuilder();
+                //    for (int i = 0; i < items.Size(); i++)
+                //    {
+                //        var line = ((TextBlock)items.ValueAt(i)).Value;
+                //        if (string.IsNullOrEmpty(line)) continue;
+                //    }
+                //    textView.Text = strBuilder.ToString();
+                //});
             }
         }
 
