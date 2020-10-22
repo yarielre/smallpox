@@ -47,19 +47,20 @@ namespace Smallpox
             textView = FindViewById<TextView>(Resource.Id.txtAux);
             cameraView = FindViewById<SurfaceView>(Resource.Id.surfaceView1);
 
-            //TextRecognizer textRecognizer = new TextRecognizer.Builder(ApplicationContext).Build();
-            MRZDetector mrzDetector = new MRZDetector();
-            
-            cameraSource = new CameraSource.Builder(ApplicationContext, mrzDetector)
-                    .SetFacing(CameraFacing.Front)
-                    .SetRequestedPreviewSize(1280, 1024)
-                    .SetRequestedFps(2.0f)
-                    .SetAutoFocusEnabled(true)
-                    .Build();
+            TextRecognizer textRecognizer = new TextRecognizer.Builder(ApplicationContext).Build();
+            //MRZDetector mrzDetector = new MRZDetector();
+            //if (textRecognizer.IsOperational)
+            //{
+                cameraSource = new CameraSource.Builder(ApplicationContext, textRecognizer)
+                        .SetFacing(CameraFacing.Front)
+                        .SetRequestedPreviewSize(1280, 1024)
+                        .SetRequestedFps(2.0f)
+                        .SetAutoFocusEnabled(true)
+                        .Build();
 
-            cameraView.Holder.AddCallback(this);
-            //textRecognizer.SetProcessor(this);
-
+                cameraView.Holder.AddCallback(this);
+                textRecognizer.SetProcessor(this);
+            //}
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -126,15 +127,15 @@ namespace Smallpox
             SparseArray items = detections.DetectedItems;
             if (items.Size() != 0)
             {
-                    for (int i = 0; i < items.Size(); i++)
-                    {
+                for (int i = 0; i < items.Size(); i++)
+                {
                     var line = ((TextBlock)items.ValueAt(i)).Value;
                     if (string.IsNullOrEmpty(line)) continue;
                     if (line.Contains("<<<"))
                     {
                         textView.Text = line;
                         //cameraSource.TakePicture()
-                cameraSource.TakePicture(this, this);
+                        cameraSource.TakePicture(this, this);
                     }
                     if (line.Contains(">>>"))
                     {
@@ -163,13 +164,11 @@ namespace Smallpox
         {
             // En data esta la imagen
             // Enviar al API para analizar
-            Console.WriteLine();
         }
 
         public void OnShutter()
         {
             // Antes de tomar la foto
-            Console.WriteLine();
         }
     }
 }
