@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smallpox", "Smallpox\Smallp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smallpox.Web", "Smallpox.Web\Smallpox.Web.csproj", "{82DF3481-0B79-493E-BBF1-838137C5881B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmallpoxApi", "SmallpoxApi\SmallpoxApi.csproj", "{1E38FDC2-0351-401C-AF0D-8E7380EE4C4A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,10 +23,6 @@ Global
 		{82DF3481-0B79-493E-BBF1-838137C5881B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82DF3481-0B79-493E-BBF1-838137C5881B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82DF3481-0B79-493E-BBF1-838137C5881B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E38FDC2-0351-401C-AF0D-8E7380EE4C4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E38FDC2-0351-401C-AF0D-8E7380EE4C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E38FDC2-0351-401C-AF0D-8E7380EE4C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E38FDC2-0351-401C-AF0D-8E7380EE4C4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
