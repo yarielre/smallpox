@@ -38,7 +38,7 @@ namespace Smallpox
             saveButton.Click += async (sender, e) =>
             {
                 // Save data in API
-                string url = string.Empty; // TODO
+                string url = "https://localhost:5001/weatherforecast"; //"https://localhost:5001/api/data/saveEnterpriseData"; // TODO
                 Uri uri = new Uri(string.Format(url, string.Empty));
 
                 string json = JsonConvert.SerializeObject(new EnterpriseModel() { 
@@ -51,7 +51,8 @@ namespace Smallpox
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = null;
-                response = await client.PostAsync(uri, content);
+                //response = await client.PostAsync(uri, content);
+                response = await client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
                     var intent = new Intent(this, typeof(MainActivity));
